@@ -1,0 +1,33 @@
+﻿@model FinancialPortal.Models.Viewmodels.InviteHouseholdViewModel
+@{
+    ViewBag.Title = "Invite";
+}
+
+<div class="row">
+    <div class="col-sm-6 col-md-4">
+        <h4>Invite</h4>
+        @if (Model.UserList != null)
+        {
+            using (Html.BeginForm("Invite", "Invites", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(m => m.InviteHouseholdId)
+                <div class="form-group">
+                    @Html.LabelFor(m => m.UserList)
+                    @Html.DropDownListFor(m => m.UserId, Model.UserList)
+                </div>
+                <div class="form-group">
+                    <input type="submit" role="button" class="btn" />
+                </div>
+            }
+        }
+        else
+        {
+            <p>There are no users who are not currently in this household and who have not received an invitation to this household.</p>
+        }
+    </div>
+    <div class="col-sm-6 col-md-4">
+        <h4>Note</h4>
+        <p>Members of other households can accept your invitation to join yours. You can also invite users who have not yet joined a household.</p>
+    </div>
+</div>

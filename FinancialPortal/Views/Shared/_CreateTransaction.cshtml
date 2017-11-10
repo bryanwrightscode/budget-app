@@ -1,0 +1,35 @@
+﻿@model FinancialPortal.Models.Viewmodels.CreateTransactionViewModel
+@Html.AntiForgeryToken()
+<div class="form-group">
+    @Html.LabelFor(m => m.Amount.Amount)
+    <div class="input-group">
+        <span class="input-group-addon">$</span>
+        @Html.EditorFor(m => m.Amount.Amount,
+         new
+         {
+             htmlAttributes = new
+             {
+                 @type = "number",
+                 @min = "-999999999.99",
+                 @max = "999999999.99",
+                 @step = "0.01",
+                 @class = "form-control",
+                 aria_label = "Account Balance"
+             }
+         })
+    </div>
+    @Html.ValidationMessageFor(m => m.Amount.Amount, "", new { @class = "text-danger" })
+</div>
+<div class="form-group">
+    @Html.LabelFor(m => m.Posted)
+    @Html.EditorFor(m => m.Posted, new { htmlAttributes = new { @type = "date", @class = "form-control" } })
+</div>
+<div class="form-group">
+    @Html.LabelFor(m => m.CategorySelection)
+    @Html.DropDownListFor(m => m.CategorySelection, Model.CategoryList, "", new { @class = "form-control" })
+    @Html.ValidationMessageFor(m => m.CategorySelection, "", new { @class = "text-danger" })
+</div>
+<div class="form-group">
+    @Html.LabelFor(m => m.Reconciled)
+    @Html.CheckBoxFor(m => m.Reconciled)
+</div>

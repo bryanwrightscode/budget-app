@@ -1,0 +1,26 @@
+﻿@model FinancialPortal.Models.Viewmodels.NewHouseholdEditModel
+@{
+    ViewBag.Title = "Create";
+}
+
+<div class="row">
+    <div class="col-sm-6 col-md-4">
+        <h4>Households</h4>
+        <p>You are not in a household. You can join houses you are invited to, or create your own household. Users are permitted to only one household.</p>
+    </div>
+    <div class="col-sm-6 col-md-4">
+        <h4>Create</h4>
+        @using (Html.BeginForm("Create", "Households", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-group">
+                @Html.LabelFor(m => m.HouseholdName)
+                @Html.TextBoxFor(m => m.HouseholdName)
+                @Html.ValidationMessageFor(m => m.HouseholdName, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                <input type="submit" role="button" class="btn btn-default" value="Create" />
+            </div>
+        }
+    </div>
+</div>

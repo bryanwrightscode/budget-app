@@ -1,0 +1,38 @@
+﻿@model FinancialPortal.Models.Viewmodels.EditBankAccountViewModel
+@{
+    ViewBag.Title = "Edit";
+}
+
+<div class="row">
+    <div class="col-lg-offset-2 col-md-offset-1 col-lg-8 col-md-10">
+        <h3>Edit Account</h3>
+        <div class="panel panel-default">
+            <div class="panel-body">
+                @using (Html.BeginForm("Edit", "BankAccounts", FormMethod.Post, new { id = ViewBag.Id }))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.NickName)<br />
+                        @Html.TextBoxFor(m => m.NickName, new { @class = "form-control", placeholder = Model.NickName })<br />
+                        @Html.ValidationMessageFor(m => m.NickName, null, new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.BankNameSelection)
+                        @Html.DropDownListFor(m => m.BankNameSelection, Model.BankNameList, null, new { @class = "form-control" })<br />
+                        @Html.ValidationMessageFor(m => m.BankNameSelection, null, new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.BankAccountTypeSelection)
+                        @Html.DropDownListFor(m => m.BankAccountTypeSelection, Model.BankAccountTypeList, null, new { @class = "form-control" })<br />
+                        @Html.ValidationMessageFor(m => m.BankAccountTypeSelection, null, new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" role="button" class="btn btn-default" value="Submit" />
+                        <a href="@ViewData["BackUrl"]" class="btn btn-default">Back</a>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+

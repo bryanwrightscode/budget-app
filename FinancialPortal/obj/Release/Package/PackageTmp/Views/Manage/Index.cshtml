@@ -1,0 +1,37 @@
+﻿@model FinancialPortal.Models.IndexViewModel
+@{
+    ViewBag.Title = "Manage";
+}
+
+<h2>@ViewBag.Title.</h2>
+
+<p class="text-success">@ViewBag.StatusMessage</p>
+<div>
+    <h4>Change your account settings</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>Password:</dt>
+        <dd>
+            [
+            @if (Model.HasPassword)
+            {
+                @Html.ActionLink("Change your password", "ChangePassword")
+            }
+            else
+            {
+                @Html.ActionLink("Create", "SetPassword")
+            }
+            ]
+        </dd>
+        <dt>Name:</dt>
+        <dd>
+            [
+            @Html.ActionLink("Change your name", "ChangeName")
+            ]
+        </dd>
+        <dt>Formatting:</dt>
+        <dd>
+            @Html.ActionLink("Choose how negative values are formatted", "ChangeNegativeFormat")
+        </dd>
+    </dl>
+</div>

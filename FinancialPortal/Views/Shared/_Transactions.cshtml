@@ -1,0 +1,75 @@
+﻿@model IEnumerable<FinancialPortal.Models.Viewmodels.TransactionViewModel>
+<table class="table">
+    <thead>
+        <tr>
+            <th colspan="6" class="text-center">Transactions</th>
+        </tr>
+        <tr>
+            <th>@Html.DisplayNameFor(m => m.Amount)</th>
+            <th>@Html.DisplayNameFor(m => m.Category)</th>
+            <th>@Html.DisplayNameFor(m => m.Added)</th>
+            <th>@Html.DisplayNameFor(m => m.Posted)</th>
+            <th>@Html.DisplayNameFor(m => m.Reconciled)</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var transaction in Model)
+        {
+            <tr>
+                <td>@transaction.Amount</td>
+                <td>@transaction.Category</td>
+                <td>@transaction.Added</td>
+                <td>@transaction.Posted</td>
+                <td>@transaction.Reconciled</td>
+                <td>
+                    <div class="btn-group btn-group-sm">
+                        <a role="button" class="btn btn-default btn-sm" data-toggle="collapse" href="@String.Format("#transaction-editor-{0}",transaction.Id)" aria-expanded="false" aria-controls="@String.Format("#transaction-editor-{0}",transaction.Id)">
+                            Edit
+                        </a>
+                        <a href="#" data-toggle="modal" data-target="@String.Format("#delete-transaction-{0}",transaction.Id)" class="btn btn-danger btn-sm">
+                            Delete
+                        </a>
+                    </div>
+                    @using (Html.BeginForm("Edit", "Transactions", new { id = transaction.Id }, FormMethod.Post))
+                    {
+                        <div class="collapse" id="@String.Format("transaction-editor-{0}",transaction.Id)">
+                            @Html.Partial("_EditTransaction", transaction.TransactionEditor)
+                        </div>
+                    }
+                    @using (Html.BeginForm("Delete", "Transactions", new { id = transaction.Id }, FormMethod.Post))
+                    {
+                        <div class="modal fade" id="@String.Format("delete-transaction-{0}",transaction.Id)" tabindex="-1" role="dialog" aria-labelledby="updateBankAccountBalance">
+                            <div class="modal-dialog" role="document">
+                                @Html.AntiForgeryToken()
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        <h4 class="modal-title" id="confirm-delete-bank-account">Delete Transaction</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <h3>Are you sure you want to delete this transaction?</h3>
+                                        <p>@transaction.Amount</p>
+                                        <p>Added @transaction.Added</p>
+                                        <p>@transaction.Category</p>
+                                        <p>@transaction.Reconciled</p>
+                                        <p>@transaction.Posted</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                        </div>
+                                        <div class="btn-group">
+                                            <input type="submit" class="btn btn-danger" role="button" value="Delete" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

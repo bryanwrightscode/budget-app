@@ -1,0 +1,43 @@
+﻿@model FinancialPortal.Models.Viewmodels.BanksViewModel
+@{
+    ViewBag.Title = "Financial Institutions";
+}
+
+<h2 class="text-center">Financial Institutions</h2>
+<p class="text-center">Institution information retrieved from <a href="https://plaid.com/">Plaid</a>.</p>
+<hr />
+<div class="row">
+    @foreach (var bank in Model.BankNames)
+    {
+        <div class="col-lg-4 col-md-6">
+            <div class="panel panel-info">
+                <div class="panel-body">
+                    <p class="text-center text-info">@bank.BankName</p>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@*<ol>
+    @foreach (var bank in Model.BankNames)
+    {
+        <li>@bank.BankName</li>
+    }
+</ol>*@
+@*<br />
+<div class="row">
+    <div class="col-lg-4 col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-heading" style="background-color:@Model.LogoBank.Institution.Colors.Dark; color:@Model.LogoBank.Institution.Colors.Light">
+                <h3 class="panel-title">@Model.LogoBank.Institution.Name</h3>
+            </div>
+            <div class="panel-body">
+                <img height="100" src="data:image/png;base64, @Model.LogoBank.Institution.Logo" alt="Logo" />
+            </div>
+            <div class="panel-footer" style="background-color:@Model.LogoBank.Institution.Colors.Primary">
+                <p style="@Model.LogoBank.Institution.Colors.Darker">@foreach (var prod in Model.LogoBank.Institution.Products) { <text>@prod</text> }</p>
+            </div>
+        </div>
+    </div>
+</div>*@

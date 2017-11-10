@@ -1,0 +1,31 @@
+﻿@model FinancialPortal.Models.Viewmodels.HouseholdDetailsViewModel
+@{
+    ViewBag.Title = "Home";
+}
+
+<div class="row">
+    <div class="col-sm-6 col-md-4">
+        <h4>Household Name</h4>
+        <p>@Model.Household.Name</p>
+    </div>
+    <div class="col-sm-6 col-md-4">
+        <h4>Members</h4>
+        <ol>
+            @if (Model.Household.Members != null)
+            {
+                foreach (var member in Model.Household.Members)
+                {
+                    <li>@member.FullName</li>
+                }
+            }
+        </ol>
+        @Html.ActionLink("Invite", "Invite", "Invites", null, new { @class = "btn btn-default" })
+    </div>
+    <div class="col-sm-6 col-md-4">
+        <h4>Leave Household</h4>
+        @using (Html.BeginForm("Leave", "Households", new { id = Model.Household.Id }, FormMethod.Post))
+        {
+            <input type="submit" role="button" value="Leave" class="btn btn-danger" />
+        }
+    </div>
+</div>

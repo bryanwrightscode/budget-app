@@ -1,0 +1,48 @@
+﻿@model FinancialPortal.Models.Viewmodels.AcceptViewModel
+@{
+    ViewBag.Title = "Home";
+}
+
+<div class="row">
+    <h4>Accept Invitation</h4>
+    <p>You were invited to join this household. If you would like to join, click Accept.</p>
+</div>
+<div class="row">
+    <div class="col-sm-6 col-md-4">
+        <h4>Household Name</h4>
+        <p>@Model.Household.Name</p>
+    </div>
+    <div class="col-sm-6 col-md-4">
+        <h4>Members</h4>
+        <ol>
+            @if (Model.Household.Members != null)
+            {
+                foreach (var member in Model.Household.Members)
+                {
+                    <li>@member.FullName</li>
+                }
+            }
+        </ol>
+    </div>
+    <div class="col-sm-6 col-md-4">
+        <h4>Invitation</h4>
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.Invite.Id)
+            @Html.HiddenFor(m => m.Household.Id)
+            if (Model.Invite.InviteText != null)
+            {
+                <p>@Model.Invite.InviteText</p>
+                <input type="submit" role="button" class="btn btn-default" value="Accept" name="action" />
+                <input type="submit" role="button" class="btn btn-danger" value="Decline" name="action" />
+            }
+            else
+            {
+                <p>@Model.Invite.InviterId</p>
+                <input type="submit" role="button" class="btn btn-default" value="Accept" name="action" />
+                <input type="submit" role="button" class="btn btn-danger" value="Decline" name="action" />
+            }
+        }
+    </div>
+</div>

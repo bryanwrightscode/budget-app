@@ -1,0 +1,33 @@
+﻿@model FinancialPortal.Models.ChangeNegativeFormatViewModel
+@{
+    ViewBag.Title = "Manage Currency Format";
+}
+
+<div class="row">
+    <div class="col-lg-offset-2 col-md-offset-1 col-lg-8 col-md-10">
+        <h3>Manage Currency Format</h3>
+        <div class="panel panel-default">
+            <div class="panel-body">
+                @using (Html.BeginForm("ChangeNegativeFormat", "Manage", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.FormatSelection)<br />
+                        @foreach (var format in Model.FormatList)
+                        {
+                            <div class="radio">
+                                <label>
+                                    @Html.RadioButtonFor(m => m.FormatSelection, format.Key) @format.Value<br />
+                                </label>
+                            </div>
+                        }
+                        @Html.ValidationMessageFor(m => m.FormatSelection, null, new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" role="button" class="btn btn-default" value="Submit" />
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

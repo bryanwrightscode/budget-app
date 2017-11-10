@@ -1,0 +1,169 @@
+﻿@model FinancialPortal.Models.Viewmodels.HomeViewModel
+@{
+    ViewBag.Title = "Home";
+}
+@if (ViewData["Test"] != null)
+{ <p>@ViewData["Test"].ToString()</p>}
+<div class="row">
+    <h3 class="text-center">Household</h3>
+    <div class="col-sm-6 col-md-4">
+        <h4>Household Name</h4>
+        <p>@Model.Household.Name</p>
+    </div>
+    <div class="col-sm-6 col-md-4">
+        <h4>Members</h4>
+        <ol>
+            @if (Model.Household.Members != null)
+            {
+                foreach (var member in Model.Household.Members)
+                {
+            <li>@member.FullName</li>
+                }
+            }
+        </ol>
+        @Html.ActionLink("Invite", "Invite", "Invites", null, new { @class = "btn btn-default" })
+    </div>
+    <div class="col-sm-6 col-md-4">
+        <h4>Leave Household</h4>
+        @using (Html.BeginForm("Leave", "Households", new { id = Model.Household.Id }, FormMethod.Post))
+        {
+        <input type="submit" role="button" value="Leave" class="btn btn-danger" />
+        }
+    </div>
+</div>
+<hr />
+<h3 class="text-center">Accounts</h3>
+<div class="row">
+
+    <div class="col-lg-12">
+        @if (Model.BankAccounts.Count() > 0)
+        {
+            foreach (var account in Model.BankAccounts)
+            {
+                <p>
+                    @if (account.Name != null && !string.IsNullOrWhiteSpace(account.Name))
+                    {
+                        <text> @String.Format("{0} ({1})", account.Name, account.BankName)</text>
+                    }
+                    else
+                    {
+                        <text> @account.BankName</text>
+                    }
+                    <strong>@account.Balance</strong>
+                    <div class="btn-group btn-group-sm" style="display:inline-block">
+                        <a href="@Url.Action("Edit", "BankAccounts", new { id = account.Id } )" class="btn btn-default btn-xs">
+                            Edit
+                        </a>
+                        <a href="#" data-toggle="modal" data-target="@String.Format("#delete-bank-account-{0}",account.Id)" class="btn btn-danger btn-sm">
+                            Delete
+                        </a>
+                        <a href="#" data-toggle="modal" data-target="@String.Format("#update-bank-account-balance-{0}",account.Id)" class="btn btn-default btn-sm">
+                            Update Balance
+                        </a>
+                        <a role="button" class="btn btn-default btn-sm" data-toggle="collapse" href="@String.Format("#{0}",account.Details.HtmlDivId)" aria-expanded="false" aria-controls="@String.Format("#{0}",account.Details.HtmlDivId)">
+                            More
+                        </a>
+                    </div>
+                    <div class="btn-group btn-group-sm">
+                        <a href="#" data-toggle="modal" data-target="@String.Format("#add-account-transaction-{0}",account.Id)" class="btn btn-default btn-sm">Add Transaction</a>
+                    </div>
+                </p>
+
+                <!--Delete Account Modal-->
+                <div class="modal fade" id="@String.Format("update-bank-account-balance-{0}",account.Id)" tabindex="-1" role="dialog" aria-labelledby="updateBankAccountBalance">
+                    <div class="modal-dialog" role="document">
+                        @using (Html.BeginForm("UpdateBalance", "BankAccounts", new { id = account.Id }, FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken()
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title" id="confirm-delete-bank-account">Update Balance</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <h3>Are you sure you want to update the balance?</h3>
+                                    <p>@account.Name, @account.AccountType, @account.BankName, @account.Owner, @account.Balance</p>
+                                    <hr />
+                                    @Html.Partial("UpdateBalancePartial", account.BalanceEditor)
+                                </div>
+                                <div class="modal-footer">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                    </div>
+                                    <div class="btn-group">
+                                        <input type="submit" class="btn btn-primary" role="button" value="Save" />
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <!--Update Account Balance Modal-->
+                <div class="modal fade" id="@String.Format("delete-bank-account-{0}",account.Id)" tabindex="-1" role="dialog" aria-labelledby="deleteBankAccount">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="confirm-delete-bank-account">Confirm</h4>
+                            </div>
+                            <div class="modal-body">
+                                <h3>Are you sure you want to delete this account?</h3>
+                                <p>@account.Name, @account.AccountType, @account.BankName, @account.Owner, @account.Balance</p>
+                            </div>
+                            <div class="modal-footer">
+                                @using (Html.BeginForm("Delete", "BankAccounts", new { id = account.Id }, FormMethod.Post))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                    </div>
+                                    <div class="btn-group">
+                                        <input type="submit" class="btn btn-danger" role="button" value="Delete" />
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--Bank Account Details Collapse Div-->
+                <div class="collapse" id="@account.Details.HtmlDivId">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            @Html.Partial("_BankAccountDetails", @account.Details)
+                        </div>
+                    </div>
+                </div>
+                <!--Add Account Transaction Modal-->
+                <div class="modal fade" id="@String.Format("add-account-transaction-{0}",account.Id)" tabindex="-1" role="dialog" aria-labelledby="addAccountTransaction">
+                    <div class="modal-dialog" role="document">
+                        @using (Html.BeginForm("Create", "Transactions", new { id = account.Id }, FormMethod.Post))
+                        {
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title" id="confirm-delete-bank-account">Add Transaction</h4>
+                                </div>
+                                <div class="modal-body">
+                                    @Html.Partial("_CreateTransaction", account.TransactionCreator)
+                                </div>
+                                <div class="modal-footer">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                    </div>
+                                    <div class="btn-group">
+                                        <input type="submit" class="btn btn-default" role="button" value="Submit" />
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+            }
+        }
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
